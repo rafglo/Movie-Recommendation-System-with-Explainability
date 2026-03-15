@@ -1,0 +1,46 @@
+# ==========================================
+# Core Data Manipulation & Mathematics
+# ==========================================
+pandas>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# ==========================================
+# Machine Learning & Baselines
+# ==========================================
+scikit-learn>=1.2.0
+
+# ==========================================
+# Recommender System Specific Libraries
+# ==========================================
+# Excellent for standard Collaborative Filtering (SVD, KNN)
+scikit-surprise>=1.1.3
+# Highly optimized for Matrix Factorization 
+implicit>=0.7.0 
+
+# ==========================================
+# Deep Learning (Neural CF & Embeddings)
+# ==========================================
+# Standard PyTorch for building custom Deep Neural CF models
+torch>=2.0.0 
+# Useful if you extract content-based embeddings from movie titles/genres
+transformers>=4.30.0 
+
+# ==========================================
+# Explainability & Interpretability
+# ==========================================
+shap>=0.42.0
+lime>=0.2.0.1
+
+# ==========================================
+# Visualization & Reporting
+# ==========================================
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# ==========================================
+# Project Environment & Tracking (from your repo structure)
+# ==========================================
+jupyter>=1.0.0
+ipykernel>=6.0.0
+mlflow>=2.5.0
