@@ -1,0 +1,19 @@
+# Data (often too large for GitHub)
+data/raw/
+data/processed/
+
+# Python
+__pycache__/
+*.pyc
+.env
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Model artifacts (can be large)
+*.pkl
+*.h5
+
+# OS files
+.DS_Store
+Thumbs.db
