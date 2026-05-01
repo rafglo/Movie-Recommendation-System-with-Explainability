@@ -7,6 +7,8 @@ import torch.optim as optim
 import torch.optim.lr_scheduler as lr_scheduler
 from torch.utils.data import Dataset, DataLoader
 from sklearn.preprocessing import LabelEncoder
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import numpy as np
 
 class MovieLensDataset(Dataset):
     def __init__(self, users, items, ratings):
@@ -21,7 +23,7 @@ class MovieLensDataset(Dataset):
         return self.users[idx], self.items[idx], self.ratings[idx]
 
 class SimplifiedNeuMF(nn.Module):
-    def __init__(self, num_users, num_items, embed_size=32): # Smaller embeddings for small data
+    def __init__(self, num_users, num_items, embed_size=64):
         super().__init__()
         self.user_embed = nn.Embedding(num_users, embed_size)
         self.item_embed = nn.Embedding(num_items, embed_size)
@@ -51,25 +53,37 @@ class SimplifiedNeuMF(nn.Module):
         
         return (self.sigmoid(prediction) * 4.5 + 0.5).squeeze()
 
-def train_hybrid_model(epochs=5, batch_size=256):
-    processed_dir = '../data/processed'
-    models_dir = '../models'
+def train_hybrid_model(epochs=10, batch_size=2048):
+    # --- THE PATH FIX ---
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_dir)
+    
+    processed_dir = os.path.join(project_root, 'data', 'processed')
+    models_dir = os.path.join(project_root, 'models')
     os.makedirs(models_dir, exist_ok=True)
     
-    df = pd.read_parquet(f'{processed_dir}/master_data_small.parquet')
-    df = df.sort_values('datetime')
-
+    parquet_path = os.path.join(processed_dir, 'master_data_1M.parquet')
+    global_df = pd.read_parquet(parquet_path)
+    
+    # --- 1. GLOBAL ENCODING FIRST ---
     user_encoder = LabelEncoder()
     item_encoder = LabelEncoder()
-    df['user_idx'] = user_encoder.fit_transform(df['userId'])
-    df['item_idx'] = item_encoder.fit_transform(df['movieId'])
+    global_df['user_idx'] = user_encoder.fit_transform(global_df['userId'])
+    global_df['item_idx'] = item_encoder.fit_transform(global_df['movieId'])
 
-    num_users = df['user_idx'].nunique()
-    num_items = df['item_idx'].nunique()
+    # Lock in the global brain size
+    num_users = len(user_encoder.classes_)
+    num_items = len(item_encoder.classes_)
 
-    split_index = int(len(df) * 0.8)
-    train_df = df.iloc[:split_index]
+    # --- 2. THE GOLD STANDARD SPLIT (TRAIN) ---
+    global_df = global_df.sort_values(['userId', 'datetime'])
+    global_df['user_rating_rank'] = global_df.groupby('userId').cumcount()
+    global_df['user_total_ratings'] = global_df.groupby('userId')['userId'].transform('count')
 
+    # Keep ONLY the FIRST 80% of each user's history for training
+    train_df = global_df[global_df['user_rating_rank'] < (global_df['user_total_ratings'] * 0.8)].copy()
+
+    # --- 3. DATALOADER SETUP ---
     train_dataset = MovieLensDataset(train_df['user_idx'].values, train_df['item_idx'].values, train_df['rating'].values)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 
@@ -85,8 +99,9 @@ def train_hybrid_model(epochs=5, batch_size=256):
         total_loss = 0
         start_time = time.time()
         
-        for users, items, ratings in train_loader:
+        for batch_idx, (users, items, ratings) in enumerate(train_loader):
             users, items, ratings = users.to(device), items.to(device), ratings.to(device)
+            
             optimizer.zero_grad()
             predictions = model(users, items)
             loss = criterion(predictions, ratings)
@@ -94,11 +109,92 @@ def train_hybrid_model(epochs=5, batch_size=256):
             optimizer.step()
             total_loss += loss.item()
             
+            if batch_idx % 50 == 0:
+                print(f"   ... crunching batch {batch_idx}/{len(train_loader)} (Loss: {loss.item():.4f})")
+                
         avg_train_loss = total_loss / len(train_loader)
         print(f"Epoch {epoch+1}/{epochs} | Train Loss: {avg_train_loss:.4f} | Time: {time.time() - start_time:.2f}s")
 
-    torch.save(model.state_dict(), f'{models_dir}/neumf_model_small.pth')
+    torch.save(model.state_dict(), f'{models_dir}/neumf_model_1M.pth')
     print("✅ Model saved!")
+
+def evaluate_cf_model(batch_size=2048):
+    """Loads the saved model and tests its accuracy on the unseen 20% holdout set."""
+    print("Loading test data and trained model...")
+    
+    # --- THE PATH FIX ---
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(current_dir)
+    
+    processed_dir = os.path.join(project_root, 'data', 'processed')
+    models_dir = os.path.join(project_root, 'models')
+
+    # 1. Load Data
+    parquet_path = os.path.join(processed_dir, 'master_data_1M.parquet')
+    global_df = pd.read_parquet(parquet_path)
+    
+    # --- 1. GLOBAL ENCODING FIRST ---
+    user_encoder = LabelEncoder()
+    item_encoder = LabelEncoder()
+    global_df['user_idx'] = user_encoder.fit_transform(global_df['userId'])
+    global_df['item_idx'] = item_encoder.fit_transform(global_df['movieId'])
+
+    # Lock in the exact same global brain size
+    num_users = len(user_encoder.classes_)
+    num_items = len(item_encoder.classes_)
+    
+    # --- 2. THE GOLD STANDARD SPLIT (TEST) ---
+    global_df = global_df.sort_values(['userId', 'datetime'])
+    global_df['user_rating_rank'] = global_df.groupby('userId').cumcount()
+    global_df['user_total_ratings'] = global_df.groupby('userId')['userId'].transform('count')
+
+    # Keep ONLY the LAST 20% of each user's history for testing
+    test_df = global_df[global_df['user_rating_rank'] >= (global_df['user_total_ratings'] * 0.8)].copy()
+
+    # --- 3. DATALOADER SETUP ---
+    test_dataset = MovieLensDataset(test_df['user_idx'].values, test_df['item_idx'].values, test_df['rating'].values)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    # --- 4. LOAD MODEL ---
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    model = SimplifiedNeuMF(num_users, num_items).to(device)
+    
+    model_path = os.path.join(models_dir, 'neumf_model_1M.pth')
+    model.load_state_dict(torch.load(model_path, weights_only=True))
+    model.eval() 
+
+    # --- 5. INFERENCE ---
+    actuals = []
+    predictions = []
+    
+    print("Running predictions on the test set...")
+    with torch.no_grad(): 
+        for users, items, ratings in test_loader:
+            users, items = users.to(device), items.to(device)
+            preds = model(users, items).cpu().numpy()
+            
+            predictions.extend(preds)
+            actuals.extend(ratings.numpy())
+            
+    # --- 6. CALCULATE METRICS ---
+    rmse = np.sqrt(mean_squared_error(actuals, predictions))
+    mae = mean_absolute_error(actuals, predictions)
+    
+    print("\n========================================")
+    print("📈 NEURAL CF EVALUATION RESULTS")
+    print("========================================")
+    print(f"RMSE (Root Mean Squared Error): {rmse:.4f}")
+    print(f"MAE  (Mean Absolute Error):     {mae:.4f}")
+    print("========================================\n")
+    
+    if rmse < 0.90:
+        print("Verdict: World-Class. You are beating top-tier industry baselines.")
+    elif rmse < 0.95:
+        print("Verdict: Excellent. Highly accurate for production.")
+    elif rmse < 1.00:
+        print("Verdict: Good. The model has learned solid patterns.")
+    else:
+        print("Verdict: Poor. The model is essentially guessing.")
 
 if __name__ == "__main__":
     train_hybrid_model()
