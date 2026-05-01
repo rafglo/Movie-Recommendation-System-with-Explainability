@@ -62,7 +62,7 @@ def train_hybrid_model(epochs=10, batch_size=2048):
     models_dir = os.path.join(project_root, 'models')
     os.makedirs(models_dir, exist_ok=True)
     
-    parquet_path = os.path.join(processed_dir, 'master_data_1M.parquet')
+    parquet_path = os.path.join(processed_dir, 'master_data_small.parquet')
     global_df = pd.read_parquet(parquet_path)
     
     # --- 1. GLOBAL ENCODING FIRST ---
@@ -115,7 +115,7 @@ def train_hybrid_model(epochs=10, batch_size=2048):
         avg_train_loss = total_loss / len(train_loader)
         print(f"Epoch {epoch+1}/{epochs} | Train Loss: {avg_train_loss:.4f} | Time: {time.time() - start_time:.2f}s")
 
-    torch.save(model.state_dict(), f'{models_dir}/neumf_model_1M.pth')
+    torch.save(model.state_dict(), f'{models_dir}/neumf_model_small.pth')
     print("✅ Model saved!")
 
 def evaluate_cf_model(batch_size=2048):
@@ -130,7 +130,7 @@ def evaluate_cf_model(batch_size=2048):
     models_dir = os.path.join(project_root, 'models')
 
     # 1. Load Data
-    parquet_path = os.path.join(processed_dir, 'master_data_1M.parquet')
+    parquet_path = os.path.join(processed_dir, 'master_data_small.parquet')
     global_df = pd.read_parquet(parquet_path)
     
     # --- 1. GLOBAL ENCODING FIRST ---
@@ -159,7 +159,7 @@ def evaluate_cf_model(batch_size=2048):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = SimplifiedNeuMF(num_users, num_items).to(device)
     
-    model_path = os.path.join(models_dir, 'neumf_model_1M.pth')
+    model_path = os.path.join(models_dir, 'neumf_model_small.pth')
     model.load_state_dict(torch.load(model_path, weights_only=True))
     model.eval() 
 

@@ -12,17 +12,15 @@ def run_pipeline(mode):
 
     if mode in ['all', 'data']:
         print(">>> STEP 1: PREPPING DATA SYSTEM...")
-        # UPDATED: Point to the new 1M row parameters
-        prep_master_data(target_rows=1000000, min_ratings=20)
+        prep_master_data(min_ratings=10)
     
     if mode in ['all', 'train_cf']:
         print("\n>>> STEP 2: TRAINING NEURAL CF (Pipeline A)...")
-        train_hybrid_model(epochs=10, batch_size=2048)
+        train_hybrid_model(epochs=10, batch_size=256)
 
     if mode in ['all', 'eval_cf', 'train_cf']:
         print("\n>>> STEP 3: EVALUATING NEURAL CF...")
-        # UPDATED: Massive batch size for evaluation
-        evaluate_cf_model(batch_size=2048)
+        evaluate_cf_model(batch_size=256)
 
     if mode in ['all', 'test_content']:
         print("\n>>> STEP 4: TESTING CONTENT ENGINE (Pipeline B)...")
