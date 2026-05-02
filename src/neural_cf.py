@@ -173,14 +173,13 @@ def train_hybrid_model(epochs=10, batch_size=2048):
         print(f"Epoch {epoch+1}/{epochs} | Loss: {avg_train_loss:.4f} | Time: {time.time() - start_time:.2f}s")
 
     torch.save(model.state_dict(), os.path.join(models_dir, 'neumf_model_small.pth'))
-    print("Model saved!")
 
 
 def evaluate_cf_model(batch_size=2048):
     """
     Performs evaluation on the test set and calculates standard regression metrics.
     """
-    print("Loading test data and trained model...")
+    print("Loading test data and trained model")
 
     current_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(current_dir)
@@ -222,7 +221,7 @@ def evaluate_cf_model(batch_size=2048):
     actuals = []
     predictions = []
 
-    print("Running predictions...")
+    print("Running predictions")
 
     with torch.no_grad(): # Disabling gradient tracking to save memory and compute
         for users, items, ratings in test_loader:

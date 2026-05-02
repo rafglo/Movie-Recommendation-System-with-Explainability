@@ -20,9 +20,6 @@ def _initialize_engine():
     
     if _tfidf_matrix is not None:
         return
-
-    print("Booting up Content Engine (Building TF-IDF Vectors)...")
-    
     # Resolution to ensure the script finds the data directory regardless
     # of where the execution was triggered in the project tree
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -52,8 +49,6 @@ def _initialize_engine():
     tfidf = TfidfVectorizer(stop_words='english')
     _tfidf_matrix = tfidf.fit_transform(_content_df['metadata'])
     
-    print("TF-IDF Content Engine Ready\n")
-
 def get_content_recommendations(movie_title, top_n=5):
     """
     Retrieves the top N movies most similar to the input title using 

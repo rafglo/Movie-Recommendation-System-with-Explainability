@@ -15,7 +15,7 @@ def prep_master_data():
     # Ensuring the processed directory exists before saving
     os.makedirs(processed_dir, exist_ok=True)
 
-    print("Loading rating dataset...")
+    print("Loading rating dataset")
 
     # Extraction of core interaction data and item metadata
     ratings = pd.read_csv(os.path.join(raw_dir, 'ratings.csv'))
