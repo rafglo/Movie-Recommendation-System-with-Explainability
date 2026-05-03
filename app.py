@@ -1,49 +1,64 @@
 import streamlit as st
 import pandas as pd
 
-# The clean, Pythonic way to import from a subfolder
-from src.content_engine import get_content_recommendations
+# Import the Hybrid Engine
+from src.hybrid_engine import HybridRecommender
 
 # --- PAGE CONFIG ---
-st.set_page_config(page_title="NLP Movie Engine", page_icon="🍿", layout="centered")
+st.set_page_config(page_title="Hybrid Movie Engine", page_icon="🍿", layout="wide")
 
-st.title("🍿 NLP Movie Recommender")
+# Cache the engine so it only boots up the PyTorch model once
+@st.cache_resource
+def load_engine():
+    return HybridRecommender()
+
+engine = load_engine()
+
+st.title("🍿 Deep Learning Movie Recommender")
 st.markdown("""
-Welcome to the Cold-Start routing engine! Type in a movie you love, and the 
-system will use **TF-IDF & Cosine Similarity** on user tags and genres to find 
-movies with the exact same DNA.
+Welcome to the **Hybrid RecSys**. 
+1. **Pipeline B (TF-IDF)** finds 50 movies with similar DNA to your seed movie.
+2. **Pipeline A (Neural CF)** predicts exactly how much you will like them.
 """)
 st.divider()
 
-col1, col2 = st.columns([3, 1])
-with col1:
-    user_movie = st.text_input("Enter a Movie Title:", placeholder="e.g., Matrix, The or Toy Story")
-with col2:
-    top_n = st.number_input("How many?", min_value=1, max_value=20, value=5)
+# --- SIDEBAR CONTROLS ---
+st.sidebar.header("⚙️ Tuning Parameters")
+user_id = st.sidebar.number_input("Who is watching? (User ID)", min_value=1, max_value=610, value=1)
+user_movie = st.sidebar.text_input("Seed Movie Title:", value="Matrix, The")
+top_n = st.sidebar.slider("How many recommendations?", min_value=1, max_value=10, value=5)
 
-if st.button("🔮 Analyze NLP & Recommend", type="primary"):
+# --- MAIN APP ---
+if st.button("🔮 Generate Personalized Picks", type="primary"):
     if user_movie:
-        with st.spinner('Calculating TF-IDF vectors...'):
-            results = get_content_recommendations(user_movie, top_n=top_n)
+        with st.spinner(f'Consulting the Neural Network for User #{user_id}...'):
+            results = engine.recommend(user_id=user_id, movie_title=user_movie, top_n=top_n)
             
             if isinstance(results, str):
                 st.error(results)
             else:
-                st.success(f"Top {top_n} matches found!")
-                st.dataframe(
-                    results,
-                    column_config={
-                        "title": "Movie Title",
-                        "genres": "Genres",
-                        "similarity_score": st.column_config.ProgressColumn(
-                            "NLP Match Score",
-                            format="%.3f",
-                            min_value=0.0,
-                            max_value=1.0,
-                        ),
-                    },
-                    hide_index=True,
-                    use_container_width=True
-                )
+                st.success("Analysis Complete!")
+                
+                # --- DISPLAY RESULTS ---
+                for index, row in results.iterrows():
+                    with st.container():
+                        st.subheader(f"🎬 {row['title']}")
+                        
+                        col1, col2, col3 = st.columns([1, 1, 2])
+                        
+                        with col1:
+                            rating = float(row['predicted_rating'])
+                            st.metric(label="Predicted Rating", value=f"⭐ {rating:.2f} / 5.0")
+                            
+                        with col2:
+                            sim = float(row['similarity_score'])
+                            st.metric(label="TF-IDF DNA Match", value=f"{sim:.3f}")
+                            
+                        with col3:
+                            st.markdown("**Core Genres:**")
+                            genres_formatted = " ".join([f"`{g}`" for g in row['genres'].split(' ')])
+                            st.markdown(genres_formatted)
+                            
+                        st.divider()
     else:
         st.warning("Please enter a movie title first!")
