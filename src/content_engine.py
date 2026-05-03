@@ -43,7 +43,8 @@ def _initialize_engine():
     
     # Feature weighting: Genres are duplicated to increase their significance 
     # in the TF-IDF vector relative to individual user tags
-    _content_df['metadata'] = _content_df['genres'] + " " + _content_df['genres'] + " " + _content_df['tag']
+    # Feature weighting: We now include the TITLE so sequels bind together mathematically
+    _content_df['metadata'] = _content_df['title'] + " " + _content_df['genres'] + " " + _content_df['tag']
     
     # Transforming the text corpus into a mathematical sparse matrix
     tfidf = TfidfVectorizer(stop_words='english')
@@ -72,7 +73,7 @@ def get_content_recommendations(movie_title, top_n=5):
     similar_indices = sim_scores.argsort()[-(top_n+1):-1][::-1]
     
     # Returning slice of dataframe with calculated similarity metrics
-    results = _content_df.iloc[similar_indices][['title', 'genres']].copy()
+    results = _content_df.iloc[similar_indices][['movieId', 'title', 'genres']].copy()
     results['similarity_score'] = sim_scores[similar_indices].round(3)
     
     return results
