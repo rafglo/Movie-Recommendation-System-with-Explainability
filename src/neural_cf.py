@@ -173,7 +173,7 @@ def train_hybrid_model(epochs=10, batch_size=2048):
         print(f"Epoch {epoch+1}/{epochs} | Loss: {avg_train_loss:.4f} | Time: {time.time() - start_time:.2f}s")
 
     torch.save(model.state_dict(), os.path.join(models_dir, 'neumf_model_small.pth'))
-
+    return model
 
 def evaluate_cf_model(batch_size=2048):
     """
@@ -241,3 +241,4 @@ def evaluate_cf_model(batch_size=2048):
     print(f"RMSE: {rmse:.4f}")
     print(f"MAE : {mae:.4f}")
     print("========================================\n")
+    return rmse, mae  # <--- DODAJ TĘ LINIĘ
