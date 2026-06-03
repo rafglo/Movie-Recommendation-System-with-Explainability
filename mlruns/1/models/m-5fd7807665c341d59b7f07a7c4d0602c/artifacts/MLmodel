@@ -1,0 +1,23 @@
+artifact_path: file:C:/Users/rafal/OneDrive/Dokumente/GitHub/Movie-Recommendation-System-with-Explainability/mlruns/1/models/m-5fd7807665c341d59b7f07a7c4d0602c/artifacts
+flavors:
+  python_function:
+    config:
+      device: null
+    data: data
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.pytorch
+    pickle_module_name: mlflow.pytorch.pickle_module
+    python_version: 3.13.5
+  pytorch:
+    code: null
+    model_data: data
+    pytorch_version: 2.11.0+cpu
+mlflow_version: 3.11.1
+model_id: m-5fd7807665c341d59b7f07a7c4d0602c
+model_size_bytes: 2319577
+model_uuid: m-5fd7807665c341d59b7f07a7c4d0602c
+prompts: null
+run_id: 712dbf0a904d4a74aa9f7ddfa581da6e
+utc_time_created: '2026-05-04 16:15:43.667932'

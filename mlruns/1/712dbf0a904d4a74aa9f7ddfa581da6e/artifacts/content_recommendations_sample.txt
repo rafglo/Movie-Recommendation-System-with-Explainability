@@ -1,0 +1,8 @@
+                                          title  ... similarity_score
+5202                           Jetée, La (1962)  ...            0.609
+59    Lawnmower Man 2: Beyond Cyberspace (1996)  ...            0.580
+5169          Chronicles of Riddick, The (2004)  ...            0.580
+3734                           Hangar 18 (1980)  ...            0.580
+7948                        Total Recall (2012)  ...            0.580
+
+[5 rows x 3 columns]
