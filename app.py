@@ -1,64 +1,103 @@
 import streamlit as st
-import pandas as pd
 
-# Import the Hybrid Engine
-from src.hybrid_engine import HybridRecommender
+from src.hybrid_ranker import HybridRanker
 
-# --- PAGE CONFIG ---
-st.set_page_config(page_title="Hybrid Movie Engine", page_icon="🍿", layout="wide")
 
-# Cache the engine so it only boots up the PyTorch model once
+st.set_page_config(page_title="Movie Recommender", page_icon="🎬", layout="wide")
+
+
 @st.cache_resource
 def load_engine():
-    return HybridRecommender()
+    return HybridRanker()
+
 
 engine = load_engine()
 
-st.title("🍿 Deep Learning Movie Recommender")
-st.markdown("""
-Welcome to the **Hybrid RecSys**. 
-1. **Pipeline B (TF-IDF)** finds 50 movies with similar DNA to your seed movie.
-2. **Pipeline A (Neural CF)** predicts exactly how much you will like them.
-""")
-st.divider()
+st.title("Movie Recommendation System")
 
-# --- SIDEBAR CONTROLS ---
-st.sidebar.header("⚙️ Tuning Parameters")
-user_id = st.sidebar.number_input("Who is watching? (User ID)", min_value=1, max_value=610, value=1)
-user_movie = st.sidebar.text_input("Seed Movie Title:", value="Matrix, The")
-top_n = st.sidebar.slider("How many recommendations?", min_value=1, max_value=10, value=5)
+st.sidebar.header("Controls")
+mode = st.sidebar.radio("Recommendation mode", ["For a user", "Similar movies"])
+top_n = st.sidebar.slider("Number of results", min_value=5, max_value=20, value=10)
+diversity_weight = st.sidebar.slider(
+    "Diversity",
+    min_value=0.0,
+    max_value=0.3,
+    value=0.0,
+    step=0.05,
+)
 
-# --- MAIN APP ---
-if st.button("🔮 Generate Personalized Picks", type="primary"):
-    if user_movie:
-        with st.spinner(f'Consulting the Neural Network for User #{user_id}...'):
-            results = engine.recommend(user_id=user_id, movie_title=user_movie, top_n=top_n)
-            
-            if isinstance(results, str):
-                st.error(results)
+
+def render_recommendations(results):
+    if results.empty:
+        st.warning("No recommendations found for this selection.")
+        return
+
+    for _, row in results.iterrows():
+        st.subheader(row["title"])
+        col1, col2, col3 = st.columns([1, 2, 3])
+
+        with col1:
+            st.metric("Relevance", f"{float(row['relevance_score']):.3f}")
+            if "item_knn_score" in row:
+                st.caption(
+                    f"KNN {row['item_knn_score']:.2f} | "
+                    f"Pop {row['popularity_score']:.2f} | "
+                    f"Genre {row['genre_score']:.2f}"
+                )
+
+        with col2:
+            genre_tags = " ".join(f"`{genre.strip()}`" for genre in row["genres"].split("|"))
+            st.markdown(genre_tags)
+
+        with col3:
+            if "explanation_summary" in row:
+                st.markdown(row["explanation_summary"])
+
+            explanations = row["explanations"]
+            if explanations:
+                st.markdown("Similar to:")
+                for item in explanations:
+                    st.markdown(f"- {item['title']} ({item['similarity']:.3f})")
             else:
-                st.success("Analysis Complete!")
-                
-                # --- DISPLAY RESULTS ---
-                for index, row in results.iterrows():
-                    with st.container():
-                        st.subheader(f"🎬 {row['title']}")
-                        
-                        col1, col2, col3 = st.columns([1, 1, 2])
-                        
-                        with col1:
-                            rating = float(row['predicted_rating'])
-                            st.metric(label="Predicted Rating", value=f"⭐ {rating:.2f} / 5.0")
-                            
-                        with col2:
-                            sim = float(row['similarity_score'])
-                            st.metric(label="TF-IDF DNA Match", value=f"{sim:.3f}")
-                            
-                        with col3:
-                            st.markdown("**Core Genres:**")
-                            genres_formatted = " ".join([f"`{g}`" for g in row['genres'].split(' ')])
-                            st.markdown(genres_formatted)
-                            
-                        st.divider()
-    else:
-        st.warning("Please enter a movie title first!")
+                st.markdown("No strong similarity explanation available.")
+
+            if "component_contributions" in row:
+                with st.expander("Contribution details"):
+                    contributions = row["component_contributions"]["contributions"]
+                    for label, value in contributions.items():
+                        st.markdown(f"`{label}`: {value:.3f}")
+
+                    if "item_knn_shap" in row:
+                        st.markdown("SHAP values")
+                        st.markdown(f"`item_knn`: {row['item_knn_shap']:.3f}")
+                        st.markdown(f"`popularity`: {row['popularity_shap']:.3f}")
+                        st.markdown(f"`genre`: {row['genre_shap']:.3f}")
+
+        st.divider()
+
+
+if mode == "For a user":
+    user_ids = engine.available_user_ids()
+    user_id = st.sidebar.selectbox("User ID", user_ids, index=0)
+
+    liked = engine.user_liked_movies(user_id, limit=8)
+    if not liked.empty:
+        st.caption(f"Recent high-rated movies for user {user_id}")
+        st.dataframe(liked[["title", "rating"]], width="stretch", hide_index=True)
+
+    if st.button("Generate Recommendations", type="primary"):
+        with st.spinner("Finding movies similar to this user's taste..."):
+            recommendations = engine.recommend_for_user(
+                user_id=user_id,
+                top_n=top_n,
+                diversity_weight=diversity_weight,
+            )
+        render_recommendations(recommendations)
+
+else:
+    seed_title = st.sidebar.text_input("Movie title", value="Matrix")
+
+    if st.button("Find Similar Movies", type="primary"):
+        with st.spinner("Computing item-item similarities..."):
+            recommendations = engine.item_engine.recommend_similar_movies(seed_title, top_n=top_n)
+        render_recommendations(recommendations)

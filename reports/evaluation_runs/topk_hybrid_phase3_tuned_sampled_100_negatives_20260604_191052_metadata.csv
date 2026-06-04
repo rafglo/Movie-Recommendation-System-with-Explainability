@@ -1,0 +1,2 @@
+run_id,run_timestamp,run_label,candidate_mode,negatives_per_user,max_users,users_evaluated,positive_threshold,k_values,include_neumf,include_hybrid,hybrid_weights,diversity_weight,avg_candidates_per_user
+topk_hybrid_phase3_tuned_sampled_100_negatives_20260604_191052,2026-06-04 19:10:52,hybrid_phase3_tuned,sampled_100_negatives,100,100,100,4.0,5|10,True,True,item_knn:0.50|popularity:0.25|genre:0.25,0.0,115.16
