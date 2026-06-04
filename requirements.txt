@@ -17,7 +17,7 @@ pyarrow>=14.0.0
 # ==========================================
 # Machine Learning & Baselines
 # ==========================================
-scikit-learn>=1.2.0
+scikit-learn>=1.6.1,<1.8.0
 
 # ==========================================
 # Recommender System Specific Libraries
