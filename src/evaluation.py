@@ -6,6 +6,8 @@ from itertools import product
 import numpy as np
 import pandas as pd
 
+from src.mlflow_utils import configure_mlflow, log_artifacts, log_metrics, log_params
+
 
 def safe_transform(encoder, values):
     mapping = {k: i + 1 for i, k in enumerate(encoder.classes_)}
@@ -451,7 +453,7 @@ def _save_evaluation_outputs(
     print(f"Saved summary to {latest_summary_path}")
 
     if not save_history:
-        return latest_summary_path
+        return {"latest_summary": latest_summary_path}
 
     runs_dir = os.path.join(reports_dir, "evaluation_runs")
     os.makedirs(runs_dir, exist_ok=True)
@@ -480,7 +482,13 @@ def _save_evaluation_outputs(
     print(f"Saved timestamped summary to {summary_path}")
     print(f"Updated leaderboard at {leaderboard_path}")
 
-    return summary_path
+    return {
+        "latest_summary": latest_summary_path,
+        "timestamped_summary": summary_path,
+        "per_user_metrics": raw_path,
+        "metadata": metadata_path,
+        "leaderboard": leaderboard_path,
+    }
 
 
 def evaluate_topk_recommenders(
@@ -678,12 +686,29 @@ def evaluate_topk_recommenders(
     print(summary.round(4).to_string(index=False))
     print("========================================\n")
 
-    _save_evaluation_outputs(
+    output_paths = _save_evaluation_outputs(
         summary=summary,
         raw_metrics=raw_metrics,
         run_metadata=run_metadata,
         save_history=save_history,
     )
+    mlflow = configure_mlflow("movie_recommender_evaluation")
+    if mlflow is not None:
+        with mlflow.start_run(run_name=run_metadata["run_id"]):
+            log_params(mlflow, run_metadata)
+            for _, row in summary.iterrows():
+                recommender = row["recommender"]
+                metrics = {
+                    col: row[col]
+                    for col in summary.columns
+                    if col != "recommender"
+                }
+                log_metrics(mlflow, metrics, prefix=recommender)
+            log_artifacts(
+                mlflow,
+                list(output_paths.values()),
+                artifact_path="evaluation",
+            )
 
     return summary
 

@@ -8,13 +8,13 @@ filtering, hybrid ranking, top-K evaluation, and a Streamlit application.
 
 The project now has a working model pipeline and GUI.
 
-- Best benchmark model: ranking NeuMF
+- Best benchmark model: hybrid ranker
 - Best explainable GUI model: hybrid ranker
 - GUI framework: Streamlit
 - Main benchmark: top-K recommendation quality with NDCG@10
 
-The app currently uses the hybrid ranker because it is nearly tied with the
-ranking NeuMF and gives clearer recommendation explanations.
+The app currently uses the hybrid ranker because it is the strongest final
+logged sampled benchmark model and gives clearer recommendation explanations.
 
 ## Setup
 
@@ -84,6 +84,19 @@ Run the standard sampled top-K benchmark:
 python main.py --mode eval_topk --run-label benchmark
 ```
 
+Open the MLflow UI:
+
+```powershell
+python -m mlflow ui --backend-store-uri sqlite:///mlflow.db
+```
+
+Final training and evaluation runs are logged under:
+
+```text
+movie_recommender_training
+movie_recommender_evaluation
+```
+
 Run a full-catalog smoke benchmark:
 
 ```powershell
@@ -108,8 +121,8 @@ Current key results:
 
 | Recommender | Precision@10 | Recall@10 | HitRate@10 | NDCG@10 |
 | --- | ---: | ---: | ---: | ---: |
-| ranking NeuMF | 0.416 | 0.498 | 0.930 | 0.586 |
 | hybrid ranker | 0.397 | 0.504 | 0.950 | 0.584 |
+| ranking NeuMF | 0.415 | 0.485 | 0.910 | 0.569 |
 | item-item KNN | 0.382 | 0.483 | 0.940 | 0.541 |
 | popularity baseline | 0.330 | 0.381 | 0.850 | 0.473 |
 | rating NeuMF | 0.195 | 0.210 | 0.760 | 0.241 |
@@ -117,16 +130,16 @@ Current key results:
 
 ## Why Two Strong Models?
 
-The ranking NeuMF is the strongest sampled benchmark model. It is trained with
-positive interactions and sampled negatives using `BCEWithLogitsLoss`.
-
-The hybrid ranker is selected for the GUI because it is almost as strong and
-much easier to explain. It combines:
+The hybrid ranker is the strongest final logged sampled benchmark model and is
+selected for the GUI because it is directly explainable. It combines:
 
 - item-item KNN similarity
 - Bayesian-smoothed popularity
 - genre affinity
 - optional diversity reranking
+
+The ranking NeuMF is the strongest neural model. It is trained with positive
+interactions and sampled negatives using `BCEWithLogitsLoss`.
 
 ## Explainability
 
@@ -165,6 +178,13 @@ reports/evaluation_runs/leaderboard.csv
 reports/hybrid_weight_tuning.csv
 reports/neumf_ranking_training_history.csv
 reports/final_model_summary.md
+```
+
+MLflow tracking:
+
+```text
+mlflow.db
+mlruns/
 ```
 
 ## Notes

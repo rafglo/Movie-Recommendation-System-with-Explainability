@@ -11,6 +11,8 @@ from torch.utils.data import Dataset, DataLoader # data handling
 from sklearn.preprocessing import LabelEncoder # encoding categorical labels
 from sklearn.metrics import mean_squared_error, mean_absolute_error # model evaluation metrics
 
+from src.mlflow_utils import configure_mlflow, log_artifacts, log_metrics, log_params
+
 
 class MovieLensDataset(Dataset):
     """
@@ -317,6 +319,23 @@ def train_neumf_ranking_model(
     project_root = os.path.dirname(current_dir)
     models_dir = os.path.join(project_root, 'models')
     os.makedirs(models_dir, exist_ok=True)
+    mlflow = configure_mlflow("movie_recommender_training")
+    mlflow_run = None
+    if mlflow is not None:
+        mlflow_run = mlflow.start_run(run_name="ranking_neumf_training")
+        log_params(mlflow, {
+            "model": "RankingNeuMF",
+            "epochs": epochs,
+            "batch_size": batch_size,
+            "negatives_per_positive": negatives_per_positive,
+            "min_positive_rating": min_positive_rating,
+            "learning_rate": learning_rate,
+            "validation_k": validation_k,
+            "validation_users": validation_users,
+            "validation_negatives": validation_negatives,
+            "random_state": random_state,
+            "loss": "BCEWithLogitsLoss",
+        })
 
     global_df = load_master_data_for_training()
     genre_cols = extract_genre_features(global_df)
@@ -354,6 +373,17 @@ def train_neumf_ranking_model(
     items = safe_transform(item_encoder, ranking_df['movieId'])
     genres = ranking_df[genre_cols].values
     labels = ranking_df['label'].values
+    torch.manual_seed(random_state)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(random_state)
+    log_params(mlflow, {
+        "ranking_interactions": len(ranking_df),
+        "positive_interactions": int(labels.sum()),
+        "negative_interactions": int((labels == 0).sum()),
+        "num_users": train_df['userId'].nunique(),
+        "num_items": train_df['movieId'].nunique(),
+        "num_genres": len(genre_cols),
+    })
 
     dataset = RankingMovieLensDataset(users, items, genres, labels)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
@@ -426,6 +456,16 @@ def train_neumf_ranking_model(
             f'ndcg@{validation_k}': ndcg,
             'is_best': ndcg == best_ndcg,
         })
+        log_metrics(
+            mlflow,
+            {
+                "loss": avg_loss,
+                **metrics,
+                "best_ndcg": best_ndcg,
+            },
+            step=epoch + 1,
+            prefix="validation",
+        )
 
         print(
             f"Epoch {epoch + 1}/{epochs} | Loss: {avg_loss:.4f} | "
@@ -440,6 +480,20 @@ def train_neumf_ranking_model(
     history_path = os.path.join(reports_dir, 'neumf_ranking_training_history.csv')
     pd.DataFrame(history_rows).to_csv(history_path, index=False)
     print(f"Saved ranking training history to {history_path}")
+    log_metrics(mlflow, {f"best_ndcg@{validation_k}": best_ndcg})
+    log_artifacts(
+        mlflow,
+        [
+            best_path,
+            os.path.join(models_dir, 'ranking_user_encoder.pkl'),
+            os.path.join(models_dir, 'ranking_item_encoder.pkl'),
+            os.path.join(models_dir, 'ranking_genre_cols.pkl'),
+            history_path,
+        ],
+        artifact_path="ranking_neumf",
+    )
+    if mlflow_run is not None:
+        mlflow.end_run()
     return best_ndcg
 
 

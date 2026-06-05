@@ -15,6 +15,19 @@ Main benchmark:
 - users evaluated: 100
 - primary metric: NDCG@10
 
+Final training and evaluation are logged in MLflow:
+
+```text
+movie_recommender_training
+movie_recommender_evaluation
+```
+
+Open the MLflow UI with:
+
+```powershell
+python -m mlflow ui --backend-store-uri sqlite:///mlflow.db
+```
+
 Full-catalog evaluation is also available with:
 
 ```powershell
@@ -25,8 +38,8 @@ python main.py --mode eval_topk --full-catalog
 
 | Recommender | Precision@10 | Recall@10 | HitRate@10 | NDCG@10 |
 | --- | ---: | ---: | ---: | ---: |
-| ranking NeuMF | 0.416 | 0.498 | 0.930 | 0.586 |
 | hybrid ranker | 0.397 | 0.504 | 0.950 | 0.584 |
+| ranking NeuMF | 0.415 | 0.485 | 0.910 | 0.569 |
 | item-item KNN | 0.382 | 0.483 | 0.940 | 0.541 |
 | popularity baseline | 0.330 | 0.381 | 0.850 | 0.473 |
 | rating NeuMF | 0.195 | 0.210 | 0.760 | 0.241 |
@@ -38,7 +51,7 @@ The Streamlit app uses the hybrid ranker.
 
 Reason:
 
-- it is nearly tied with ranking NeuMF on NDCG@10
+- it is the strongest model in the final logged sampled benchmark
 - it has stronger direct explainability
 - it exposes clear component scores: item similarity, popularity, and genre match
 
@@ -65,6 +78,22 @@ Training history:
 | 3 | 0.416 | 0.511 |
 | 4 | 0.372 | 0.558 |
 | 5 | 0.333 | 0.593 |
+
+The final ranking NeuMF training run logs:
+
+- training parameters
+- per-epoch loss and top-K validation metrics
+- best model artifact
+- encoders and genre metadata
+- training history CSV
+
+The final `eval_topk` run logs:
+
+- benchmark parameters
+- per-recommender Precision, Recall, HitRate, and NDCG
+- summary CSV
+- per-user metrics CSV
+- leaderboard CSV
 
 ## Explainability Strategy
 
