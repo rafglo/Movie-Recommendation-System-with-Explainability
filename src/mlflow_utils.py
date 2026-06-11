@@ -10,6 +10,7 @@ def project_root():
 def configure_mlflow(experiment_name):
     try:
         import mlflow
+        from mlflow.exceptions import MlflowException
     except ModuleNotFoundError:
         print("MLflow is not installed; skipping MLflow logging.")
         return None
@@ -17,7 +18,23 @@ def configure_mlflow(experiment_name):
     root = project_root()
     tracking_uri = f"sqlite:///{root.as_posix()}/mlflow.db"
     mlflow.set_tracking_uri(tracking_uri)
-    mlflow.set_experiment(experiment_name)
+
+    try:
+        mlflow.set_experiment(experiment_name)
+    except MlflowException as exc:
+        message = str(exc)
+        if "out-of-date database schema" in message or "Can't locate revision" in message:
+            print(
+                "MLflow tracking is unavailable because the local mlflow.db schema "
+                "does not match this MLflow installation. Saved CSV reports will "
+                "still be used. To repair tracking manually, back up mlflow.db and "
+                f"run: mlflow db upgrade {tracking_uri}"
+            )
+            return None
+
+        print(f"MLflow tracking is unavailable; skipping MLflow logging. Details: {exc}")
+        return None
+
     return mlflow
 
 
