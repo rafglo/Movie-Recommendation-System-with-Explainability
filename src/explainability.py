@@ -107,6 +107,70 @@ def shap_hybrid_values(rows, weights):
     )
 
 
+def genre_affinity_breakdown(user_profile, item_genres, genre_cols, top_n=10):
+    """
+    Decompose the hybrid genre-affinity score into per-genre contributions.
+
+    HybridRanker computes genre affinity as a cosine-like dot product between
+    the user's normalized genre profile and the candidate movie's active genre
+    vector. This helper exposes the individual genre terms in that dot product.
+    """
+    user_profile = np.asarray(user_profile, dtype=np.float32)
+    item_genres = np.asarray(item_genres, dtype=np.float32)
+    item_norm = np.linalg.norm(item_genres)
+
+    if item_norm <= 0:
+        return pd.DataFrame(columns=["genre", "user_profile_strength", "item_has_genre", "contribution"])
+
+    rows = []
+    for idx, genre in enumerate(genre_cols):
+        item_value = float(item_genres[idx])
+        if item_value <= 0:
+            continue
+        rows.append(
+            {
+                "genre": genre,
+                "user_profile_strength": float(user_profile[idx]),
+                "item_has_genre": item_value,
+                "contribution": float(user_profile[idx] * item_value / item_norm),
+            }
+        )
+
+    return (
+        pd.DataFrame(rows)
+        .sort_values("contribution", ascending=False)
+        .head(top_n)
+        .reset_index(drop=True)
+    )
+
+
+def bayesian_popularity_breakdown(movie_id, train_df, smoothing=10):
+    """
+    Explain the Bayesian-smoothed popularity score for one movie.
+
+    The score combines the movie's own average rating with the global average.
+    Movies with few ratings are pulled more strongly toward the global prior.
+    """
+    movie_ratings = train_df.loc[train_df["movieId"] == movie_id, "rating"]
+    global_mean = float(train_df["rating"].mean())
+    rating_count = int(movie_ratings.count())
+    movie_mean = float(movie_ratings.mean()) if rating_count else global_mean
+    data_weight = rating_count / (rating_count + smoothing) if rating_count + smoothing else 0.0
+    prior_weight = smoothing / (rating_count + smoothing) if rating_count + smoothing else 0.0
+    bayesian_score = movie_mean * data_weight + global_mean * prior_weight
+
+    return {
+        "movieId": int(movie_id),
+        "movie_mean_rating": movie_mean,
+        "rating_count": rating_count,
+        "global_mean_rating": global_mean,
+        "smoothing": smoothing,
+        "movie_data_weight": data_weight,
+        "global_prior_weight": prior_weight,
+        "bayesian_popularity_score": bayesian_score,
+    }
+
+
 def rank_genre_occlusion_effects(model, user_tensor, item_tensor, genre_tensor, genre_cols, top_n=5):
     """
     Model-specific explanation for ranking NeuMF: measure how much the logit
