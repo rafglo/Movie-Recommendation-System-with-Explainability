@@ -16,8 +16,6 @@ def prep_master_data():
     # Ensuring the processed directory exists before saving
     os.makedirs(processed_dir, exist_ok=True)
 
-    print("Loading rating and movie datasets...")
-
     # Extraction of core interaction data and item metadata
     ratings = pd.read_csv(os.path.join(raw_dir, 'ratings.csv'))
     movies = pd.read_csv(os.path.join(raw_dir, 'movies.csv'))
@@ -25,7 +23,6 @@ def prep_master_data():
     # Conversion of Unix timestamps to readable datetime objects for temporal analysis
     ratings['datetime'] = pd.to_datetime(ratings['timestamp'], unit='s')
 
-    print("Extracting explicit genre features for SHAP explainability...")
     # 1. Multi-hot encode the genres (converts "Action|Sci-Fi" into a binary matrix)
     genre_dummies = movies['genres'].str.get_dummies(sep='|')
     
