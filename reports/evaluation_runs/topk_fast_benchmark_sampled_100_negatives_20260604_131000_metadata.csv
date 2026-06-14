@@ -1,2 +1,0 @@
-run_id,run_timestamp,run_label,candidate_mode,negatives_per_user,max_users,users_evaluated,positive_threshold,k_values,include_neumf,avg_candidates_per_user
-topk_fast_benchmark_sampled_100_negatives_20260604_131000,2026-06-04 13:10:00,fast_benchmark,sampled_100_negatives,100,100,100,4.0,5|10,True,115.16

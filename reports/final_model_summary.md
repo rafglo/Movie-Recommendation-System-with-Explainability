@@ -42,7 +42,7 @@ python main.py --mode eval_topk --full-catalog
 | ranking NeuMF | 0.415 | 0.485 | 0.910 | 0.569 |
 | item-item KNN | 0.382 | 0.483 | 0.940 | 0.541 |
 | popularity baseline | 0.330 | 0.381 | 0.850 | 0.473 |
-| rating NeuMF | 0.195 | 0.210 | 0.760 | 0.241 |
+| rating NeuMF | 0.176 | 0.182 | 0.710 | 0.198 |
 | random baseline | 0.104 | 0.120 | 0.620 | 0.136 |
 
 ## Selected GUI Model
@@ -73,11 +73,16 @@ Training history:
 
 | Epoch | Loss | NDCG@10 |
 | ---: | ---: | ---: |
-| 1 | 0.572 | 0.221 |
-| 2 | 0.458 | 0.398 |
-| 3 | 0.416 | 0.511 |
-| 4 | 0.372 | 0.558 |
-| 5 | 0.333 | 0.593 |
+| 1 | 0.585 | 0.175 |
+| 2 | 0.461 | 0.332 |
+| 3 | 0.419 | 0.457 |
+| 4 | 0.377 | 0.537 |
+| 5 | 0.338 | 0.591 |
+| 6 | 0.311 | 0.594 |
+| 7 | 0.296 | 0.603 |
+| 8 | 0.285 | 0.606 |
+| 9 | 0.278 | 0.601 |
+| 10 | 0.272 | 0.605 |
 
 The final ranking NeuMF training run logs:
 
@@ -103,13 +108,26 @@ Model-specific explanations are used first:
 - hybrid ranker: exact weighted component contributions
 - ranking NeuMF: genre occlusion sensitivity
 
-SHAP is used only on final structured hybrid features:
+SHAP is used in two layers:
+
+Faithful hybrid-level SHAP:
 
 - item KNN score
 - popularity score
 - genre score
 
-This avoids explaining opaque embedding dimensions directly.
+Original-feature surrogate SHAP:
+
+- genres
+- tags
+- rating statistics
+- user profile features
+- collaborative evidence features
+
+The hybrid-level SHAP values explain the deployed scoring formula directly.
+The original-feature SHAP analysis explains surrogate models trained to
+approximate each component score, so it should be interpreted as feature-level
+insight rather than the exact internal formula of item-item KNN.
 
 ## Next Recommended Work
 

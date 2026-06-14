@@ -1,9 +1,7 @@
 # ==========================================
-# Build Tools (CRITICAL FIX FOR C++ ERRORS)
-# Pinned strictly to prevent scikit-surprise & implicit from crashing
+# Build Tools
 # ==========================================
 numpy>=1.24.0,<2.0.0
-cython>=3.0.0  
 setuptools>=65.0.0
 wheel
 
@@ -20,26 +18,17 @@ pyarrow>=14.0.0
 scikit-learn>=1.6.1,<1.8.0
 
 # ==========================================
-# Recommender System Specific Libraries
-# ==========================================
-# Excellent for standard Collaborative Filtering (SVD, KNN)
-implicit>=0.7.0
-
-# ==========================================
-# Deep Learning & NLP (Content-Based Engine)
+# Deep Learning & Content-Based Modeling
 # ==========================================
 # Standard PyTorch for building custom Deep Neural CF models
-torch>=2.0.0 
-# For extracting dense embeddings from tags and titles
-transformers>=4.30.0 
-# For text visualization (used in EDA)
+torch>=2.0.0
+# Text visualization used in the EDA notebook
 wordcloud>=1.9.0
 
 # ==========================================
 # Explainability & Interpretability
 # ==========================================
 shap>=0.42.0
-lime>=0.2.0.1
 
 # ==========================================
 # Visualization & Reporting
@@ -52,5 +41,5 @@ seaborn>=0.12.0
 # ==========================================
 jupyter>=1.0.0
 ipykernel>=6.0.0
-mlflow>=3.13.0,<4.0.0
+mlflow>=3.11.0,<4.0.0
 streamlit>=1.30.0

@@ -51,7 +51,7 @@ http://localhost:8501
 The app supports:
 
 - user-based recommendations
-- similar-movie recommendations
+- similar-movie recommendations based on item-item collaborative similarity
 - relevance scores
 - similar-liked-movie explanations
 - KNN, popularity, and genre contribution scores
@@ -75,7 +75,7 @@ python main.py --mode train_cf
 Train the ranking NeuMF:
 
 ```powershell
-python main.py --mode train_rank_neumf --ranking-epochs 5 --negative-samples 4
+python main.py --mode train_rank_neumf --ranking-epochs 10 --negative-samples 4
 ```
 
 Run the standard sampled top-K benchmark:
@@ -125,7 +125,7 @@ Current key results:
 | ranking NeuMF | 0.415 | 0.485 | 0.910 | 0.569 |
 | item-item KNN | 0.382 | 0.483 | 0.940 | 0.541 |
 | popularity baseline | 0.330 | 0.381 | 0.850 | 0.473 |
-| rating NeuMF | 0.195 | 0.210 | 0.760 | 0.241 |
+| rating NeuMF | 0.176 | 0.182 | 0.710 | 0.198 |
 | random | 0.104 | 0.120 | 0.620 | 0.136 |
 
 ## Why Two Strong Models?
@@ -149,14 +149,23 @@ The project uses model-specific explanations first:
 - hybrid ranker: weighted component contributions
 - ranking NeuMF: genre occlusion utility for neural score sensitivity
 
-SHAP is only applied to final structured hybrid features:
+SHAP is used in two ways:
+
+1. Faithful top-level SHAP over the actual hybrid ranker inputs:
 
 - item KNN score
 - popularity score
 - genre score
 
-This keeps explanations interpretable instead of applying SHAP directly to
-latent embedding dimensions.
+2. Original-feature surrogate SHAP in
+   `notebooks/shap_original_feature_analysis.ipynb`, using interpretable
+   features such as genres, tags, rating statistics, user profile features,
+   and collaborative evidence.
+
+The first analysis explains the deployed scoring formula directly. The second
+analysis helps understand feature-level drivers behind the component scores,
+but should be described as surrogate interpretation rather than the exact
+internal formula of item-item KNN or the hybrid ranker.
 
 ## Important Artifacts
 
@@ -177,7 +186,18 @@ reports/topk_evaluation_summary.csv
 reports/evaluation_runs/leaderboard.csv
 reports/hybrid_weight_tuning.csv
 reports/neumf_ranking_training_history.csv
+reports/shap_original_feature_importance.csv
+reports/shap_surrogate_metrics.csv
 reports/final_model_summary.md
+```
+
+Final notebooks:
+
+```text
+notebooks/final_submission.ipynb
+notebooks/final_interpretability_analysis.ipynb
+notebooks/shap_hybrid_analysis.ipynb
+notebooks/shap_original_feature_analysis.ipynb
 ```
 
 MLflow tracking:

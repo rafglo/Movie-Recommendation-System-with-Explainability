@@ -10,9 +10,23 @@ __pycache__/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
-# Model artifacts (can be large)
+# Model artifacts
 *.pkl
 *.h5
+
+# Keep the small metadata artifacts required to reload saved NeuMF models.
+!models/genre_cols.pkl
+!models/item_encoder.pkl
+!models/user_encoder.pkl
+!models/ranking_genre_cols.pkl
+!models/ranking_item_encoder.pkl
+!models/ranking_user_encoder.pkl
+
+# Generated experiment outputs. Keep selected final reports tracked explicitly.
+reports/evaluation_runs/topk_*
+mlruns/*
+!mlruns/.gitkeep
+mlflow.db.backup_*
 
 # OS files
 .DS_Store

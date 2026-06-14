@@ -16,8 +16,16 @@ models/genre_cols.pkl
 reports/topk_evaluation_summary.csv
 reports/hybrid_weight_tuning.csv
 reports/neumf_ranking_training_history.csv
+reports/shap_original_feature_importance.csv
+reports/shap_surrogate_metrics.csv
 reports/final_model_summary.md
 reports/evaluation_runs/leaderboard.csv
+reports/evaluation_runs/topk_sampled_100_negatives_20260613_135608_summary.csv
+reports/evaluation_runs/topk_sampled_100_negatives_20260613_135608_per_user_metrics.csv
+reports/evaluation_runs/topk_sampled_100_negatives_20260613_135608_metadata.csv
+reports/evaluation_runs/topk_full_catalog_smoke_full_catalog_20260604_131111_summary.csv
+reports/evaluation_runs/topk_full_catalog_smoke_full_catalog_20260604_131111_per_user_metrics.csv
+reports/evaluation_runs/topk_full_catalog_smoke_full_catalog_20260604_131111_metadata.csv
 ```
 
 ## Optional
@@ -30,6 +38,8 @@ notebooks/eda.ipynb
 notebooks/model_baseline.ipynb
 notebooks/model_content.ipynb
 notebooks/model_neural_cf.ipynb
+notebooks/shap_hybrid_analysis.ipynb
+notebooks/shap_original_feature_analysis.ipynb
 ```
 
 ## Generated Experiment History
@@ -48,7 +58,6 @@ be deleted if repository size becomes an issue.
 Check whether these are still needed before final submission:
 
 ```text
-models/neumf_model_1M.pth
 mlruns/
 mlflow.db
 ```
