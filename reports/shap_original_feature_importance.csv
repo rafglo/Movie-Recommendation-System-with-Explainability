@@ -1,0 +1,341 @@
+target,rank,feature,mean_abs_shap
+item_knn_score,1,knn_max_similarity,0.14599899824900475
+item_knn_score,2,knn_mean_top3_similarity,0.09171715944132326
+item_knn_score,3,knn_evidence_count,0.04721580680053623
+item_knn_score,4,user_pref::Adventure,0.0078057910516689645
+item_knn_score,5,user_pref::Horror,0.006994170875758522
+item_knn_score,6,user_pref::IMAX,0.0064663311593990205
+item_knn_score,7,user_rating_mean,0.003629379226106774
+item_knn_score,8,user_pref::Comedy,0.0027982061948251735
+item_knn_score,9,user_pref::Fantasy,0.002658641822224675
+item_knn_score,10,user_pref::Drama,0.0022318679338565496
+item_knn_score,11,user_pref::Romance,0.002149776072108833
+item_knn_score,12,movie_rating_count,0.0021214191802242013
+item_knn_score,13,user_pref::Sci-Fi,0.0018493193639330424
+item_knn_score,14,user_pref::War,0.0014876431158093756
+item_knn_score,15,user_pref::Crime,0.0014307576102667629
+item_knn_score,16,user_rating_count,0.0012974255277906244
+item_knn_score,17,user_rating_std,0.0011639730531229522
+item_knn_score,18,user_pref::Children,0.0009164425081705269
+item_knn_score,19,user_pref::Western,0.0009129144997253062
+item_knn_score,20,movie_bayesian_rating,0.0008692261123462495
+item_knn_score,21,user_pref::Thriller,0.0007926833818100845
+item_knn_score,22,user_pref::Documentary,0.0006841355759376021
+item_knn_score,23,user_pref::Action,0.000630124162085437
+item_knn_score,24,user_pref::Animation,0.0005852480857201774
+item_knn_score,25,user_positive_rate,0.0005637391572220228
+item_knn_score,26,genre::Drama,0.0005215334187703995
+item_knn_score,27,user_pref::Musical,0.00036323432686173406
+item_knn_score,28,genre::Action,0.00024624263501061075
+item_knn_score,29,user_pref::Film-Noir,0.0002216130998781354
+item_knn_score,30,user_pref::Mystery,0.00021861850217032758
+item_knn_score,31,genre::Adventure,0.00018744016180847564
+item_knn_score,32,movie_rating_mean,0.0001823903316840646
+item_knn_score,33,movie_rating_std,0.00016789067429484893
+item_knn_score,34,genre::Comedy,0.0001669428089451386
+item_knn_score,35,genre::Horror,0.00016412636139031555
+item_knn_score,36,release_year,0.00016320386397459394
+item_knn_score,37,movie_unique_tag_count,0.0001565154616300171
+item_knn_score,38,movie_age,0.00015007434197808576
+item_knn_score,39,movie_tag_count,0.00013176671551324125
+item_knn_score,40,genre::Thriller,0.00011920485169668196
+item_knn_score,41,tag::psychology,0.00010748492641866451
+item_knn_score,42,tag::action,9.355421229698792e-05
+item_knn_score,43,genre::Crime,8.700247308072473e-05
+item_knn_score,44,genre::Fantasy,8.562123050076687e-05
+item_knn_score,45,genre::Romance,7.468786914221118e-05
+item_knn_score,46,genre::War,7.332180326586884e-05
+item_knn_score,47,genre::Sci-Fi,6.365993798845424e-05
+item_knn_score,48,genre::IMAX,5.946830874272349e-05
+item_knn_score,49,genre::Musical,5.709612527570204e-05
+item_knn_score,50,tag::mindfuck,5.315092345791023e-05
+item_knn_score,51,genre::Children,4.0726681287149684e-05
+item_knn_score,52,tag::thought-provoking,3.302431482681616e-05
+item_knn_score,53,tag::sci-fi,3.20575024464803e-05
+item_knn_score,54,genre::Animation,3.170195902965747e-05
+item_knn_score,55,tag::suspense,2.59799301400557e-05
+item_knn_score,56,tag::comedy,1.7445930308720813e-05
+item_knn_score,57,genre::Mystery,1.4887146806311968e-05
+item_knn_score,58,tag::twist ending,1.1352247218190644e-05
+item_knn_score,59,genre::Film-Noir,1.0521364755702889e-05
+item_knn_score,60,tag::atmospheric,8.522654199541243e-06
+item_knn_score,61,genre::Western,7.654251972476465e-06
+item_knn_score,62,tag::religion,7.5906131711029774e-06
+item_knn_score,63,tag::quirky,6.765061469938674e-06
+item_knn_score,64,tag::dark comedy,5.614061685420254e-06
+item_knn_score,65,tag::mental illness,5.37464416910769e-06
+item_knn_score,66,tag::politics,4.915564986330682e-06
+item_knn_score,67,tag::disney,4.3209044844038096e-06
+item_knn_score,68,tag::in netflix queue,3.844258502793623e-06
+item_knn_score,69,genre::Documentary,2.9603519823213475e-06
+item_knn_score,70,tag::dark,2.4457569286180837e-06
+item_knn_score,71,tag::dreamlike,2.20011406571007e-06
+item_knn_score,72,tag::surreal,1.8162507062560138e-06
+item_knn_score,73,tag::space,1.2640874260780302e-06
+item_knn_score,74,tag::crime,7.408533260494385e-07
+item_knn_score,75,tag::black comedy,4.2372546067084516e-07
+item_knn_score,76,tag::funny,2.936602987493454e-07
+item_knn_score,77,tag::aliens,0.0
+item_knn_score,78,tag::superhero,0.0
+item_knn_score,79,tag::time travel,0.0
+item_knn_score,80,tag::high school,0.0
+item_knn_score,81,tag::music,0.0
+item_knn_score,82,tag::visually appealing,0.0
+item_knn_score,83,genre::(no genres listed),0.0
+item_knn_score,84,user_pref::(no genres listed),0.0
+item_knn_score,85,tag::shakespeare,0.0
+popularity_score,1,movie_bayesian_rating,0.06491440225475428
+popularity_score,2,movie_rating_mean,0.02447201043899484
+popularity_score,3,movie_rating_count,0.019023495693491117
+popularity_score,4,user_pref::Fantasy,0.004105433374931817
+popularity_score,5,knn_mean_top3_similarity,0.004093318081143223
+popularity_score,6,knn_evidence_count,0.003565170360276081
+popularity_score,7,user_pref::Thriller,0.002949041419476362
+popularity_score,8,user_pref::Western,0.0016461669137433769
+popularity_score,9,knn_max_similarity,0.0015888018280080284
+popularity_score,10,user_pref::Crime,0.0015129817443624355
+popularity_score,11,user_rating_count,0.000785023251169014
+popularity_score,12,user_rating_std,0.0007475727011628273
+popularity_score,13,genre::Crime,0.0007207628543626312
+popularity_score,14,user_pref::Adventure,0.0005968965420158343
+popularity_score,15,user_pref::Romance,0.0005525507719214231
+popularity_score,16,user_pref::Mystery,0.0004814200252815108
+popularity_score,17,user_pref::Sci-Fi,0.0004689971840524313
+popularity_score,18,user_pref::Drama,0.0003837073258747308
+popularity_score,19,user_pref::Animation,0.0003821522362583872
+popularity_score,20,movie_rating_std,0.000372002763512262
+popularity_score,21,user_pref::Documentary,0.00035645164832258586
+popularity_score,22,user_pref::Film-Noir,0.0003155204400664342
+popularity_score,23,user_pref::War,0.0002692732811213453
+popularity_score,24,movie_unique_tag_count,0.00022367392478526854
+popularity_score,25,user_positive_rate,0.00022233466038805558
+popularity_score,26,user_pref::IMAX,0.00021425768279462827
+popularity_score,27,genre::Comedy,0.00020916083136708307
+popularity_score,28,user_pref::Action,0.00019113325996456367
+popularity_score,29,user_rating_mean,0.0001434401998727068
+popularity_score,30,user_pref::Children,0.00014121713346366846
+popularity_score,31,user_pref::Musical,0.00012640698407374463
+popularity_score,32,genre::Drama,0.00012528603419173628
+popularity_score,33,user_pref::Comedy,0.00012230203033294
+popularity_score,34,user_pref::Horror,0.0001104800456372581
+popularity_score,35,genre::Adventure,0.00010870998071233355
+popularity_score,36,genre::Action,9.658899808988959e-05
+popularity_score,37,movie_tag_count,8.847005677508367e-05
+popularity_score,38,genre::Children,7.757876025133859e-05
+popularity_score,39,genre::Romance,7.411452300963552e-05
+popularity_score,40,release_year,5.711269819845906e-05
+popularity_score,41,genre::Fantasy,4.7821909283258255e-05
+popularity_score,42,movie_age,4.4910956823545344e-05
+popularity_score,43,genre::Sci-Fi,4.2829879239103913e-05
+popularity_score,44,genre::Thriller,3.69392483209509e-05
+popularity_score,45,genre::War,2.089494124673826e-05
+popularity_score,46,tag::atmospheric,1.769317035943748e-05
+popularity_score,47,genre::Horror,1.5661837146690603e-05
+popularity_score,48,tag::sci-fi,1.4901950763995384e-05
+popularity_score,49,genre::Musical,1.4590273524597163e-05
+popularity_score,50,tag::space,1.1556180122275477e-05
+popularity_score,51,genre::Animation,1.0415024967169875e-05
+popularity_score,52,tag::twist ending,7.78556922663788e-06
+popularity_score,53,genre::Mystery,5.703278124914994e-06
+popularity_score,54,tag::action,5.400473563497169e-06
+popularity_score,55,tag::suspense,4.992614074724573e-06
+popularity_score,56,tag::quirky,4.8419487181264875e-06
+popularity_score,57,tag::psychology,4.379124947094115e-06
+popularity_score,58,genre::Documentary,4.369569130096857e-06
+popularity_score,59,tag::black comedy,4.204877767456438e-06
+popularity_score,60,tag::mindfuck,3.6805460648804268e-06
+popularity_score,61,genre::IMAX,3.4488810409371123e-06
+popularity_score,62,tag::crime,3.2589911478147045e-06
+popularity_score,63,tag::dark,3.2084498879346707e-06
+popularity_score,64,tag::religion,3.104905205303683e-06
+popularity_score,65,tag::dark comedy,3.0869821081093076e-06
+popularity_score,66,tag::thought-provoking,3.057514164477928e-06
+popularity_score,67,tag::comedy,2.1951592438447017e-06
+popularity_score,68,tag::in netflix queue,1.8184502844783836e-06
+popularity_score,69,tag::politics,1.6988784370212607e-06
+popularity_score,70,tag::mental illness,1.4795434562921686e-06
+popularity_score,71,tag::music,9.824174996583792e-07
+popularity_score,72,tag::surreal,8.397535697094774e-07
+popularity_score,73,tag::dreamlike,7.378601065948579e-07
+popularity_score,74,tag::funny,6.478558696030183e-07
+popularity_score,75,tag::disney,6.446575743399038e-07
+popularity_score,76,tag::superhero,4.497391962200535e-07
+popularity_score,77,tag::time travel,2.9519888767709213e-07
+popularity_score,78,genre::Western,2.8615682164114346e-07
+popularity_score,79,tag::visually appealing,1.3746706960600788e-07
+popularity_score,80,tag::high school,0.0
+popularity_score,81,genre::Film-Noir,0.0
+popularity_score,82,tag::aliens,0.0
+popularity_score,83,genre::(no genres listed),0.0
+popularity_score,84,user_pref::(no genres listed),0.0
+popularity_score,85,tag::shakespeare,0.0
+genre_score,1,genre::Drama,0.16404652152130114
+genre_score,2,genre::Comedy,0.04358720366069135
+genre_score,3,genre::Action,0.027751875438670987
+genre_score,4,knn_max_similarity,0.018019891877056812
+genre_score,5,user_pref::Drama,0.01772330888646473
+genre_score,6,knn_mean_top3_similarity,0.012945130930875544
+genre_score,7,user_pref::Comedy,0.012515731546969645
+genre_score,8,genre::Documentary,0.012342428189447535
+genre_score,9,genre::Adventure,0.01136655539026845
+genre_score,10,genre::Thriller,0.01087422692863414
+genre_score,11,genre::Crime,0.00965152855541388
+genre_score,12,user_pref::Children,0.007236732480914412
+genre_score,13,genre::Romance,0.005797820448614739
+genre_score,14,user_pref::Adventure,0.005555329235774151
+genre_score,15,user_pref::Action,0.004503451237449733
+genre_score,16,user_pref::Documentary,0.0043798934737750836
+genre_score,17,user_pref::Musical,0.004184722207712532
+genre_score,18,user_pref::Romance,0.0035723633839039736
+genre_score,19,genre::Animation,0.003512420521672782
+genre_score,20,user_pref::Animation,0.003507716486277042
+genre_score,21,user_pref::Fantasy,0.00342515332954279
+genre_score,22,genre::Mystery,0.003184928541960726
+genre_score,23,genre::War,0.0028658663698775755
+genre_score,24,user_pref::War,0.0028116979737851234
+genre_score,25,user_pref::Thriller,0.00248371901826092
+genre_score,26,user_pref::Crime,0.002398626760863827
+genre_score,27,genre::Horror,0.002128097217191369
+genre_score,28,user_pref::Horror,0.001998841873739046
+genre_score,29,genre::Children,0.001982871830445561
+genre_score,30,genre::Fantasy,0.0019458586842116203
+genre_score,31,user_pref::Film-Noir,0.001641415261583938
+genre_score,32,movie_rating_count,0.0015345981118206847
+genre_score,33,genre::Musical,0.00134574178489976
+genre_score,34,movie_rating_std,0.0012588565870183246
+genre_score,35,movie_bayesian_rating,0.0012324956188163893
+genre_score,36,user_pref::Mystery,0.0012175720324678408
+genre_score,37,genre::Sci-Fi,0.0012156578898160964
+genre_score,38,user_rating_mean,0.001097786058695284
+genre_score,39,movie_rating_mean,0.0010496392266690763
+genre_score,40,user_pref::Western,0.0010323650570413987
+genre_score,41,user_rating_count,0.0010040244814030024
+genre_score,42,user_rating_std,0.0009617905614083836
+genre_score,43,user_positive_rate,0.0008919921244366273
+genre_score,44,genre::Western,0.0008268566807039763
+genre_score,45,user_pref::IMAX,0.0007994145096340589
+genre_score,46,user_pref::Sci-Fi,0.0007601872252424391
+genre_score,47,movie_age,0.0007353057539948102
+genre_score,48,release_year,0.0007205887100164021
+genre_score,49,knn_evidence_count,0.0006161074634886048
+genre_score,50,tag::psychology,0.0006111254523787002
+genre_score,51,movie_tag_count,0.000579897818935164
+genre_score,52,movie_unique_tag_count,0.000522811993304594
+genre_score,53,tag::in netflix queue,0.0005211677670242425
+genre_score,54,genre::IMAX,0.0002931627156994723
+genre_score,55,tag::dark,0.00023158497239485172
+genre_score,56,tag::dark comedy,0.00016294341330027335
+genre_score,57,tag::crime,0.0001530727053523536
+genre_score,58,tag::action,0.0001217460436222635
+genre_score,59,tag::atmospheric,5.680566657205395e-05
+genre_score,60,tag::sci-fi,5.427900551484797e-05
+genre_score,61,tag::religion,5.163621895682843e-05
+genre_score,62,tag::dreamlike,4.87523255792382e-05
+genre_score,63,tag::disney,4.5531734294143036e-05
+genre_score,64,tag::suspense,4.361233726344095e-05
+genre_score,65,tag::thought-provoking,4.037404073524617e-05
+genre_score,66,tag::surreal,3.530765853515842e-05
+genre_score,67,tag::comedy,3.0931460247596e-05
+genre_score,68,tag::quirky,2.8870942034428515e-05
+genre_score,69,tag::visually appealing,2.210571815443567e-05
+genre_score,70,tag::mental illness,1.5150471357588593e-05
+genre_score,71,tag::twist ending,1.3398827916114466e-05
+genre_score,72,tag::black comedy,1.0966624736373885e-05
+genre_score,73,tag::mindfuck,9.600311255250836e-06
+genre_score,74,tag::superhero,8.800050753826442e-06
+genre_score,75,tag::funny,8.77370819951868e-06
+genre_score,76,tag::space,6.191192752768753e-06
+genre_score,77,tag::time travel,2.4942807562024325e-06
+genre_score,78,tag::aliens,0.0
+genre_score,79,user_pref::(no genres listed),0.0
+genre_score,80,tag::high school,0.0
+genre_score,81,tag::music,0.0
+genre_score,82,tag::politics,0.0
+genre_score,83,genre::(no genres listed),0.0
+genre_score,84,genre::Film-Noir,0.0
+genre_score,85,tag::shakespeare,0.0
+hybrid_score,1,knn_max_similarity,0.08570150754055392
+hybrid_score,2,knn_mean_top3_similarity,0.06721649424105236
+hybrid_score,3,genre::Drama,0.03585913924500705
+hybrid_score,4,knn_evidence_count,0.029857452714622448
+hybrid_score,5,genre::Comedy,0.0065070857609099315
+hybrid_score,6,user_pref::Adventure,0.005913688166192845
+hybrid_score,7,user_pref::IMAX,0.004785499450194485
+hybrid_score,8,movie_bayesian_rating,0.003917888246269056
+hybrid_score,9,user_pref::Comedy,0.003732087810160682
+hybrid_score,10,user_pref::Drama,0.0031919088802004115
+hybrid_score,11,user_pref::Fantasy,0.002978261510134311
+hybrid_score,12,movie_rating_count,0.0029020477452803306
+hybrid_score,13,genre::Action,0.00272011380940583
+hybrid_score,14,movie_rating_mean,0.0022906093416652624
+hybrid_score,15,user_pref::Crime,0.0022281823142569646
+hybrid_score,16,user_pref::Horror,0.0018796740551690547
+hybrid_score,17,user_rating_mean,0.0018699689676539703
+hybrid_score,18,genre::Crime,0.0015970957272548635
+hybrid_score,19,user_pref::Romance,0.0013854006040009744
+hybrid_score,20,genre::Thriller,0.001198605151253055
+hybrid_score,21,user_pref::Action,0.0011942345507262857
+hybrid_score,22,user_pref::Documentary,0.0011646521719401795
+hybrid_score,23,genre::Children,0.0009186841701221027
+hybrid_score,24,user_pref::War,0.0007376552439912054
+hybrid_score,25,movie_rating_std,0.0007317588575380986
+hybrid_score,26,genre::Adventure,0.0006982865701895335
+hybrid_score,27,user_pref::Children,0.0006770831356097848
+hybrid_score,28,user_pref::Thriller,0.0006255539245641492
+hybrid_score,29,user_pref::Mystery,0.0006138761408430757
+hybrid_score,30,user_pref::Animation,0.0005985544962849293
+hybrid_score,31,genre::Documentary,0.0005508123230953777
+hybrid_score,32,user_pref::Sci-Fi,0.0005246197028151639
+hybrid_score,33,genre::Romance,0.0004980717067836875
+hybrid_score,34,user_rating_std,0.0004881659517791852
+hybrid_score,35,genre::Horror,0.00047953293050875985
+hybrid_score,36,user_positive_rate,0.00047790217167414137
+hybrid_score,37,user_rating_count,0.00046444284320668527
+hybrid_score,38,release_year,0.00041077938838130553
+hybrid_score,39,movie_age,0.0003958833491071721
+hybrid_score,40,user_pref::Musical,0.0003315213078515178
+hybrid_score,41,genre::Fantasy,0.0003274974088760047
+hybrid_score,42,genre::Animation,0.00031553073303810847
+hybrid_score,43,genre::Sci-Fi,0.00029564761902950014
+hybrid_score,44,genre::War,0.0002761603532783709
+hybrid_score,45,user_pref::Film-Noir,0.00023779692042642323
+hybrid_score,46,movie_tag_count,0.0002326058273370157
+hybrid_score,47,user_pref::Western,0.00022776160339451845
+hybrid_score,48,tag::dark comedy,0.00017654587883862683
+hybrid_score,49,genre::Musical,0.00017352174835898006
+hybrid_score,50,movie_unique_tag_count,0.00016973596677288865
+hybrid_score,51,genre::Mystery,0.00014785939648502292
+hybrid_score,52,tag::psychology,0.0001433600884933761
+hybrid_score,53,genre::IMAX,9.052754738812618e-05
+hybrid_score,54,tag::thought-provoking,8.869496054402671e-05
+hybrid_score,55,genre::Western,6.969306288502803e-05
+hybrid_score,56,tag::in netflix queue,3.902627737718624e-05
+hybrid_score,57,tag::religion,2.4715897664791593e-05
+hybrid_score,58,tag::suspense,2.4029185702384866e-05
+hybrid_score,59,tag::surreal,1.5030919973797261e-05
+hybrid_score,60,tag::action,1.2529000993530572e-05
+hybrid_score,61,tag::sci-fi,9.687637435827121e-06
+hybrid_score,62,tag::mental illness,9.683744774474596e-06
+hybrid_score,63,tag::disney,9.5167960117675e-06
+hybrid_score,64,tag::space,8.572286165831432e-06
+hybrid_score,65,tag::dreamlike,7.98745418332067e-06
+hybrid_score,66,tag::time travel,6.219339820930039e-06
+hybrid_score,67,tag::atmospheric,5.869787804030649e-06
+hybrid_score,68,tag::twist ending,4.607798848124691e-06
+hybrid_score,69,genre::Film-Noir,4.043146760236257e-06
+hybrid_score,70,tag::dark,3.385283827764804e-06
+hybrid_score,71,tag::quirky,2.9958151448720798e-06
+hybrid_score,72,tag::crime,1.9539222765862137e-06
+hybrid_score,73,tag::comedy,1.7354885341751855e-06
+hybrid_score,74,tag::mindfuck,1.110680260888463e-06
+hybrid_score,75,tag::politics,8.112291724409392e-07
+hybrid_score,76,tag::superhero,7.51168581533698e-07
+hybrid_score,77,tag::black comedy,5.126009672685669e-07
+hybrid_score,78,tag::high school,0.0
+hybrid_score,79,tag::music,0.0
+hybrid_score,80,tag::visually appealing,0.0
+hybrid_score,81,tag::aliens,0.0
+hybrid_score,82,tag::funny,0.0
+hybrid_score,83,genre::(no genres listed),0.0
+hybrid_score,84,user_pref::(no genres listed),0.0
+hybrid_score,85,tag::shakespeare,0.0
